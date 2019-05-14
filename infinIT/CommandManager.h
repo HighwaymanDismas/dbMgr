@@ -6,6 +6,8 @@
 #include <regex>
 
 #include "InputManager.h"
+#include "Instruction.h"
+#include "CreateTable.h"
 
 class CommandManager
 {
@@ -18,6 +20,7 @@ public:
 
 private:
 	InputManager inputManager;
+	Instruction *instruction;
 
 	std::regex patternCreate;
 	std::regex patternInsert;

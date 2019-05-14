@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
 #include "CommandManager.h"
 
-
 CommandManager::CommandManager()
 {
 	set_regex_patterns();
@@ -19,6 +18,7 @@ CommandManager::CommandManager(std::vector<std::string> commands)
 
 CommandManager::~CommandManager()
 {
+	delete instruction;
 }
 
 void CommandManager::parse()
@@ -28,12 +28,16 @@ void CommandManager::parse()
 	for (std::string cmd : commands)
 	{
 		if (std::regex_search(cmd, result, patternCreate))
-			std::cout << "CHUJ XD\n";
+		{
+			instruction = new CreateTable(cmd);
+			instruction->validate();
+		}
 		else if (std::regex_search(cmd, result, patternInsert))
 			std::cout << "zjebalem sie\n";
 		else if (std::regex_search(cmd, result, patternSelect))
 			std::cout << "select XD\n";
 	}
+
 }
 
 void CommandManager::set_regex_patterns()
