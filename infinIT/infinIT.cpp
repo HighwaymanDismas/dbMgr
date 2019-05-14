@@ -12,20 +12,14 @@
 #pragma region Classes
 
 #include "InputManager.h"
+#include "CommandManager.h"
 
 #pragma endregion
 
 int main()
 {
-	InputManager inputManager;
-	inputManager.take_input();
-	
-	std::vector<std::string> commands = inputManager.get_commands();
-
-	for (auto cmd : commands)
-		std::cout << cmd << std::endl;
-
-	//TEST XD
+	CommandManager commandManager;
+	commandManager.parse();
 
 	return 0;
 }
