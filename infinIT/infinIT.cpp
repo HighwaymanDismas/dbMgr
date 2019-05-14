@@ -25,5 +25,7 @@ int main()
 	for (auto cmd : commands)
 		std::cout << cmd << std::endl;
 
+	//TEST XD
+
 	return 0;
 }
