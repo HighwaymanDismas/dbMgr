@@ -5,7 +5,7 @@ CreateTable::CreateTable(std::string command)
 {
 	this->command = command;
 
-	patternParameters = std::regex("\\([\\w\\d\\s:,\\(\\)]+");
+	patternParameters = std::regex("\\(\\s*(\\w+\\s+:\\s*\\w+(\\(\\d*\\))*[,\\s]*)+\\);");
 	patternParameter = std::regex("[\\w]+[\\s]*:\\s*[\\w]*(\\(\\d*\\))*");
 	patternName = std::regex("[\\w]+");
 	patternType = std::regex("[\\w\\(\\)]+");
@@ -23,13 +23,21 @@ bool CreateTable::validate()
 	if (std::regex_search(command, match, patternParameters))
 		bufferParams = match[0];
 	else
+	{
+		std::cout << "!!! CREATE TABLE : SYNTAX ERROR !!!\n";
 		return false;
+	}
+
+	//TODO: VALIDATE VARCHAR SIZE 
 
 	name = command.substr(13, match.position() - 14);
 	name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
 
 	if (table_exists(name))
+	{
+		std::cout << "!!! " << name << " TABLE ALREADY EXISTS !!!\n";
 		return false;
+	}
 
 	return true;
 }
@@ -38,7 +46,6 @@ void CreateTable::execute()
 {
 	if (!validate())
 	{
-		std::cout << "COS SIEM ZJEBALO XDDDDDDDDD\n";
 		return;
 	}
 

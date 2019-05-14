@@ -30,11 +30,11 @@ void InputManager::split_commands()
 
 	while ((next = inputStream.find(delimiter, last)) != std::string::npos)
 	{ 
-		commands.push_back(inputStream.substr(last, next - last));
+		commands.push_back(inputStream.substr(last, next - last).append(";"));
 		last = next + 1;
 	}
 
-	commands.push_back(inputStream.substr(last));
+	commands.push_back(inputStream.substr(last).append(";"));
 }
 
 std::string InputManager::get_input()

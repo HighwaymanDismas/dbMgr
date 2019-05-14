@@ -21,7 +21,6 @@ public:
 
 private:
 	InputManager inputManager;
-	Instruction *instruction;
 
 	std::regex patternCreate;
 	std::regex patternInsert;

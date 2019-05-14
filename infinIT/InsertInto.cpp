@@ -12,6 +12,10 @@ InsertInto::~InsertInto()
 {
 }
 
+/*TODO: 
+	getting column types from table; check them against insert args
+*/
+
 bool InsertInto::validate()
 {
 	if (std::regex_search(command, match, patternParameters))
@@ -23,9 +27,9 @@ bool InsertInto::validate()
 	name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
 
 	if (table_exists(name))
-		std::cout << name << std::endl;
+		std::cout << name << " Tabela istnieje XDDDDDDD\n";
 	else
-		std::cout << name << "Tabela NIE istnieje XDDDDDDD\n";
+		std::cout << name << " Tabela NIE istnieje XDDDDDDD\n";
 
 	return true;
 }

@@ -1,0 +1,1 @@
+Title:Varchar(100),Author:Varchar(60),NumberOfCopies:Integer,Price:Float;
