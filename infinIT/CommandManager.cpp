@@ -18,7 +18,8 @@ CommandManager::CommandManager(std::vector<std::string> commands)
 
 CommandManager::~CommandManager()
 {
-	delete instruction;
+	if (instruction != nullptr)
+		delete instruction;
 }
 
 void CommandManager::parse()
@@ -30,10 +31,14 @@ void CommandManager::parse()
 		if (std::regex_search(cmd, result, patternCreate))
 		{
 			instruction = new CreateTable(cmd);
-			instruction->validate();
+			instruction->execute();
+			delete instruction;
 		}
 		else if (std::regex_search(cmd, result, patternInsert))
-			std::cout << "zjebalem sie\n";
+		{
+			instruction = new InsertInto(cmd);
+			instruction->validate();
+		}
 		else if (std::regex_search(cmd, result, patternSelect))
 			std::cout << "select XD\n";
 	}

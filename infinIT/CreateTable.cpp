@@ -7,11 +7,15 @@ CreateTable::CreateTable(std::string command)
 
 	patternParameters = std::regex("\\([\\w\\d\\s:,\\(\\)]+");
 	patternParameter = std::regex("[\\w]+[\\s]*:\\s*[\\w]*(\\(\\d*\\))*");
+	patternName = std::regex("[\\w]+");
+	patternType = std::regex("[\\w\\(\\)]+");
 
 }
 
 CreateTable::~CreateTable()
 {
+	if (file.good())
+		file.close();
 }
 
 bool CreateTable::validate()
@@ -22,11 +26,21 @@ bool CreateTable::validate()
 		return false;
 
 	name = command.substr(13, match.position() - 14);
+	name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
 
-	if (!table_exists(name))
-		std::cout << name << std::endl;
-	else
+	if (table_exists(name))
 		return false;
+
+	return true;
+}
+
+void CreateTable::execute()
+{
+	if (!validate())
+	{
+		std::cout << "COS SIEM ZJEBALO XDDDDDDDDD\n";
+		return;
+	}
 
 	std::sregex_iterator first(bufferParams.begin(), bufferParams.end(), patternParameter);
 	std::sregex_iterator last;
@@ -37,19 +51,34 @@ bool CreateTable::validate()
 		params.push_back(mtch[0]);
 	}
 
-	for (auto param : params)
-		std::cout << param << std::endl;
+	create_file(name);
 
-	return true;
-}
+	for (std::string param : params)
+	{
+		std::regex_search(param, match, patternName);
 
-void CreateTable::execute()
-{
-	validate();
+		file << match[0];
+		std::string tmp = param.substr(match.length());
+
+		std::regex_search(tmp, match, patternType);
+
+		if (param == params.back())
+			file << ":" << match[0] << ";";
+		else
+			file << ":" << match[0] << ",";
+	}
+
+	std::cout << "!!! " << name << " TABLE CREATED !!!\n";
 }
 
 bool CreateTable::validate_param(std::string param)
 {
+
+
 	return true;
 }
 
+void CreateTable::create_file(std::string name)
+{
+	file.open(name.append(".txt"), std::ios::out);
+}

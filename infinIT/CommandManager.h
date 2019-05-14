@@ -8,6 +8,7 @@
 #include "InputManager.h"
 #include "Instruction.h"
 #include "CreateTable.h"
+#include "InsertInto.h"
 
 class CommandManager
 {

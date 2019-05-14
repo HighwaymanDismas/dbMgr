@@ -4,6 +4,7 @@
 #include <iostream>
 #include <regex>
 #include <vector>
+#include <fstream>
 
 class CreateTable : public Instruction
 {
@@ -16,15 +17,12 @@ public:
 
 private:
 	bool validate_param(std::string param);
+	void create_file(std::string name);
 
-	std::regex patternParameters;
+	std::fstream file;
+
 	std::regex patternParameter;
-
-	std::smatch match;
-
-	std::string name;
-	std::string bufferParams;
-
-	std::vector<std::string> params;
+	std::regex patternName;
+	std::regex patternType;
 };
 
