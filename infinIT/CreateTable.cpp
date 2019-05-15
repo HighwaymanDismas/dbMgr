@@ -8,7 +8,6 @@ CreateTable::CreateTable(std::string command)
 	patternParameters = std::regex("\\([\\w,:]*\\(\\d*\\)[\\w,:()]*\\)$");
 	patternParameter = std::regex("[\\w]+[\\s]*:\\s*[\\w]*(\\(\\d*\\))*");
 	patternVarchar = std::regex("Varchar\\(\\d+\\)");
-
 }
 
 CreateTable::~CreateTable()
@@ -24,51 +23,12 @@ bool CreateTable::validate()
 
 	if (!std::regex_search(command, match, patternParameters))
 	{
-		std::cout << command << std::endl;
 		std::cout << "SYNTAX ERROR\n";
 		return false;
 	}
 
 	name = command.substr(0, command.find("("));
 	command = command.substr(command.find("("));
-
-	std::sregex_iterator first(command.begin(), command.end(), patternParameter);
-	std::sregex_iterator last;
-
-	for (std::sregex_iterator itr = first; itr != last; itr++)
-	{
-		std::smatch mtch = *itr;
-		params.push_back(mtch[0]);
-	}
-
-	//TODO: VALIDATE VARCHAR SIZE 
-
-	for (std::string param : params) 
-	{
-		if (std::regex_search(param, match, std::regex("Varchar")))
-		{
-			if (!std::regex_search(param, match, patternVarchar))
-			{
-				std::cout << "SYNTAX ERROR: WRONG USE OF VARCHAR\n";
-				return false;
-			}
-			
-			std::regex_search(param, match, std::regex("\\d+"));
-
-			if (std::stoi(match[0]) > 255 || std::stoi(match[0]) < 1)
-			{
-				std::cout << "WRONG SIZE OF VARCHAR";
-				return false;
-			}
-		}
-		else if (!std::regex_search(param, match, std::regex("Integer")) && !std::regex_search(param, match, std::regex("Float")) && !std::regex_search(param, match, std::regex("Boolean")))
-		{
-			std::cout << "SYNTAX ERROR\n";
-			return false;
-		}
-
-		std::cout << param << std::endl;
-	}
 
 
 	if (table_exists(name))
@@ -77,8 +37,10 @@ bool CreateTable::validate()
 		return false;
 	}
 
+	if (!validate_params())
+		return false;
+
 	return true;
-	//name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
 }
 
 void CreateTable::execute()
@@ -95,11 +57,50 @@ void CreateTable::execute()
 		else
 			file << param << ";";
 	}
+
+	file.close();
+
+	if (table_exists(name))
+		std::cout << "!!! " << name << " TABLE CREATED SUCESSFULLY !!!\n";
+	else
+		std::cout << "!!! COULDN'T CREATE NEW FILE !!!\n";
 }
 
-bool CreateTable::validate_param(std::string param)
+bool CreateTable::validate_params()
 {
+	std::sregex_iterator first(command.begin(), command.end(), patternParameter);
+	std::sregex_iterator last;
 
+	for (std::sregex_iterator itr = first; itr != last; itr++)
+	{
+		std::smatch mtch = *itr;
+		params.push_back(mtch[0]);
+	}
+
+	for (std::string param : params)
+	{
+		if (std::regex_search(param, match, std::regex("Varchar")))
+		{
+			if (!std::regex_search(param, match, patternVarchar))
+			{
+				std::cout << "SYNTAX ERROR: WRONG USE OF VARCHAR\n";
+				return false;
+			}
+
+			std::regex_search(param, match, std::regex("\\d+"));
+
+			if (std::stoi(match[0]) > CreateTable::MAX_SIZE || std::stoi(match[0]) < CreateTable::MIN_SIZE)
+			{
+				std::cout << "WRONG SIZE OF VARCHAR";
+				return false;
+			}
+		}
+		else if (!std::regex_search(param, match, std::regex("Integer")) && !std::regex_search(param, match, std::regex("Float")) && !std::regex_search(param, match, std::regex("Boolean")))
+		{
+			std::cout << "SYNTAX ERROR\n";
+			return false;
+		}
+	}
 
 	return true;
 }

@@ -13,6 +13,20 @@ public:
 	virtual void execute() override;
 
 private:
-	std::regex patternTableName;
+	std::regex patternVarchar;
+	std::regex patternBoolean;
+
+	std::fstream file;
+
+	std::vector<std::string> data;
+	std::vector<int> varcharSizes;
+	
+	int tableSize;
+
+	void get_table_params();
+	void get_insert_data();
+	bool validate_data();
+
+	std::vector<std::string> split(std::string str, std::string delimiter);
 };
 

@@ -29,6 +29,12 @@ void CommandManager::parse()
 	{
 		Instruction *instruction = nullptr;
 
+		if (std::regex_search(cmd, result, antiPatternCommand))
+		{
+			std::cout << "CHUJEMUJE XDD\n";
+			return;
+		}
+
 		if (std::regex_search(cmd, result, patternCreate))
 		{
 			instruction = new CreateTable(cmd);
@@ -37,10 +43,12 @@ void CommandManager::parse()
 		else if (std::regex_search(cmd, result, patternInsert))
 		{
 			instruction = new InsertInto(cmd);
-			instruction->validate();
+			instruction->execute();
 		}
 		else if (std::regex_search(cmd, result, patternSelect))
 			std::cout << "select XD\n";
+		else
+			std::cout << "!!! UNKNOWN INSTRUCTION !!!\n";
 
 		delete instruction;
 	}
@@ -48,7 +56,8 @@ void CommandManager::parse()
 
 void CommandManager::set_regex_patterns()
 {
-	this->patternCreate = std::regex("CREATE");
-	this->patternInsert = std::regex("INSERT INTO");
-	this->patternSelect = std::regex("SELECT");
+	patternCreate = std::regex("^(CREATE)");
+	patternInsert = std::regex("^(INSERT INTO)");
+	patternSelect = std::regex("^(SELECT)");
+	antiPatternCommand = std::regex("[\\)]\\s*(INSERT|CREATE|SELECT)");
 }

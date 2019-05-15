@@ -12,12 +12,12 @@ public:
 	virtual ~Instruction();
 
 	virtual bool validate() = 0;
-	bool table_exists(std::string name);
 	virtual void execute() = 0;
+
+	bool table_exists(std::string name);
 
 protected:
 	std::smatch match;
-
 	std::regex patternParameters;
 
 	std::string command;

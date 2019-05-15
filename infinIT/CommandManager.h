@@ -25,6 +25,7 @@ private:
 	std::regex patternCreate;
 	std::regex patternInsert;
 	std::regex patternSelect;
+	std::regex antiPatternCommand;
 
 	std::vector<std::string> commands;
 

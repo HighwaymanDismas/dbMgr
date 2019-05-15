@@ -16,12 +16,15 @@ public:
 	virtual void execute() override;
 
 private:
-	bool validate_param(std::string param);
+	bool validate_params();
 	void create_file(std::string name);
 
 	std::fstream file;
 
 	std::regex patternParameter;
 	std::regex patternVarchar;
+
+	const static int MAX_SIZE = 256;
+	const static int MIN_SIZE = 1;
 };
 
