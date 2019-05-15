@@ -19,7 +19,7 @@ InsertInto::~InsertInto()
 bool InsertInto::validate()
 {
 	if (std::regex_search(command, match, patternParameters))
-		bufferParams = match[0];
+		std::cout << match[0] << std::endl;
 	else
 		return false;
 

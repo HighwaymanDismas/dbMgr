@@ -22,7 +22,6 @@ private:
 	std::fstream file;
 
 	std::regex patternParameter;
-	std::regex patternName;
-	std::regex patternType;
+	std::regex patternVarchar;
 };
 

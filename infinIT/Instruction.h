@@ -22,7 +22,6 @@ protected:
 
 	std::string command;
 	std::string name;
-	std::string bufferParams;
 
 	std::vector<std::string> params;
 };
