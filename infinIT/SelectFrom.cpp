@@ -53,9 +53,26 @@ void SelectFrom::execute()
 
 void SelectFrom::select(std::string name)
 {
+	std::string line;
 	file.open(name.append(".txt"), std::ios::in);
 
-	std::string line;
+	std::getline(file, line);
+	tableParams = split(line, ",");
+
+	for (std::string param : tableParams)
+	{
+		bool flag = false;
+
+		if (param == tableParams.back())
+			flag = true;
+
+		param = param.substr(0, param.find(":"));
+
+		if(!flag)
+			std::cout << param << ", ";
+		else
+			std::cout << param << std::endl;
+	}
 
 	while (!file.eof())
 	{
@@ -63,7 +80,7 @@ void SelectFrom::select(std::string name)
 		data.push_back(line);
 	}
 
-	for (auto line : data)
+	for (std::string line : data)
 	{
 		line.erase(line.end() - 1);
 		line = std::regex_replace(line, std::regex(","), ", ");

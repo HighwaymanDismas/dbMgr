@@ -25,7 +25,5 @@ private:
 	void get_table_params();
 	void get_insert_data();
 	bool validate_data();
-
-	std::vector<std::string> split(std::string str, std::string delimiter);
 };
 

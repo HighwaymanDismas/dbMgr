@@ -18,6 +18,7 @@ private:
 
 	std::fstream file;
 
+	std::vector<std::string> tableParams;
 	std::vector<std::string> data;
 
 	void select(std::string name);
