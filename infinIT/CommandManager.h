@@ -1,15 +1,5 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <vector>
-#include <regex>
-
-#include "InputManager.h"
-#include "Instruction.h"
-#include "CreateTable.h"
-#include "InsertInto.h"
-
 class CommandManager
 {
 public:
@@ -25,6 +15,8 @@ private:
 	std::regex patternCreate;
 	std::regex patternInsert;
 	std::regex patternSelect;
+	std::regex patternDrop;
+	std::regex patternDelete;
 	std::regex antiPatternCommand;
 
 	std::vector<std::string> commands;

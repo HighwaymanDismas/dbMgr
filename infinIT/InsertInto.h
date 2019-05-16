@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Instruction.h"
-#include <iostream>
 
 class InsertInto : public Instruction
 {

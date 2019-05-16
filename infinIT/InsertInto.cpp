@@ -15,10 +15,6 @@ InsertInto::~InsertInto()
 	file.close();
 }
 
-/*TODO: 
-	getting column types from table; check them against insert args
-*/
-
 bool InsertInto::validate()
 {
 	if (!std::regex_search(command, match, patternParameters))

@@ -1,10 +1,5 @@
 #pragma once
 
-#include <string>
-#include <fstream>
-#include <regex>
-#include <vector>
-
 class Instruction
 {
 public:
