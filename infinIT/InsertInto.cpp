@@ -56,6 +56,8 @@ void InsertInto::execute()
 		else
 			file << word << ";";
 	}
+
+	std::cout << "!!! DATA ADDED SUCCESSFULLY !!!\n";
 }
 
 void InsertInto::get_table_params()

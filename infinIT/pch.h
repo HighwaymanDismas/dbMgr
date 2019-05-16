@@ -7,6 +7,7 @@
 #include <regex>
 #include <fstream>
 #include <algorithm>
+#include <cstdbool>
 
 #include "InputManager.h"
 #include "Instruction.h"

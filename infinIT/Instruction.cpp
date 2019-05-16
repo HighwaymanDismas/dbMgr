@@ -12,8 +12,7 @@ Instruction::~Instruction()
 
 bool Instruction::table_exists(std::string name)
 {
-	name.append(".txt");
-	std::ifstream file(name);
+	std::fstream file(name.append(".txt"));
 
 	return file.good();
 }
