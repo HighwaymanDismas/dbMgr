@@ -8,6 +8,7 @@
 #include <fstream>
 #include <algorithm>
 #include <cstdbool>
+#include <stdio.h>
 
 #include "InputManager.h"
 #include "Instruction.h"
@@ -15,5 +16,6 @@
 #include "InsertInto.h"
 #include "SelectFrom.h"
 #include "CommandManager.h"
+#include "DropTable.h"
 
 #endif //PCH_H

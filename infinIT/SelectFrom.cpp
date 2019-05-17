@@ -32,9 +32,12 @@ bool SelectFrom::validate()
 		return false;
 	}
 
-	params.push_back(command.substr(7, match.position() - 8));
+	SelectedColumnNames = (command.substr(7, match.position() - 8));
+	SelectedColumnNames.erase(std::remove_if(SelectedColumnNames.begin(), SelectedColumnNames.end(), ::isspace), SelectedColumnNames.end());
+
+	get_column_names();
 	
-	if (params[0].find("*") == -1)
+	if (SelectedColumnNames != "*")
 	{
 		std::cout << "!!! ONLY * WORKS AT THIS POINT !!!\n";
 		return false;
@@ -51,19 +54,24 @@ void SelectFrom::execute()
 	select(name);
 }
 
-void SelectFrom::select(std::string name)
+void SelectFrom::get_column_names()
+{
+	//USE params
+}
+
+void SelectFrom::select(std::string name, std::vector<std::string> filterColumns)
 {
 	std::string line;
 	file.open(name.append(".txt"), std::ios::in);
 
 	std::getline(file, line);
-	tableParams = split(line, ",");
+	params = split(line, ",");
 
-	for (std::string param : tableParams)
+	for (std::string param : params)
 	{
 		bool flag = false;
 
-		if (param == tableParams.back())
+		if (param == params.back())
 			flag = true;
 
 		param = param.substr(0, param.find(":"));

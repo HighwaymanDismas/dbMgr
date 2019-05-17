@@ -5,6 +5,7 @@
 class InsertInto : public Instruction
 {
 public:
+	InsertInto();
 	InsertInto(std::string command);
 	~InsertInto();
 
@@ -14,8 +15,6 @@ public:
 private:
 	std::regex patternVarchar;
 	std::regex patternBoolean;
-
-	std::fstream file;
 
 	std::vector<std::string> data;
 	std::vector<int> varcharSizes;

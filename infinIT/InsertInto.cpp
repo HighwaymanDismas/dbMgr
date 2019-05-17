@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "InsertInto.h"
 
+InsertInto::InsertInto()
+{
+}
+
 InsertInto::InsertInto(std::string command)
 {
 	this->command = command;

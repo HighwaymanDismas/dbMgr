@@ -19,8 +19,6 @@ private:
 	bool validate_params();
 	void create_file(std::string name);
 
-	std::fstream file;
-
 	std::regex patternParameter;
 	std::regex patternVarchar;
 

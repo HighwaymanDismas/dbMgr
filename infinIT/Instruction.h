@@ -16,6 +16,8 @@ protected:
 	std::smatch match;
 	std::regex patternParameters;
 
+	std::fstream file;
+
 	std::string command;
 	std::string name;
 

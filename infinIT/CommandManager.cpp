@@ -31,7 +31,7 @@ void CommandManager::parse()
 
 		if (std::regex_search(cmd, result, antiPatternCommand))
 		{
-			std::cout << "CHUJEMUJE XDD\n";
+			std::cout << "!!! INVALID SYNTAX !!!\n";
 			return;
 		}
 
@@ -56,7 +56,8 @@ void CommandManager::parse()
 		}
 		else if (std::regex_search(cmd, result, patternDrop))
 		{
-			std::cout << "DROP DA TABLE\n";
+			instruction = new DropTable(cmd);
+			instruction->execute();
 		}
 		else
 			std::cout << "!!! UNKNOWN INSTRUCTION !!!\n";

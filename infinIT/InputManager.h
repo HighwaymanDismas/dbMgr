@@ -19,8 +19,6 @@ private:
 	std::string inputStream;
 	std::vector<std::string> commands;
 
-	int commandIndex;
-
 	void split_commands();
 };
 

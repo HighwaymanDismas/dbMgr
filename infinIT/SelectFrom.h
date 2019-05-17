@@ -11,15 +11,16 @@ public:
 	virtual void execute() override;
 
 private:
-	std::regex patternColumn;
+	std::regex patternColumns;
 	std::regex patternFrom;
 	std::regex patternWhere;
-	std::regex patternWhereParam;
+	std::regex patternWhereParams;
 
-	std::fstream file;
-
-	std::vector<std::string> tableParams;
 	std::vector<std::string> data;
+	std::vector<std::string> filterColumns;
 
-	void select(std::string name);
+	std::string SelectedColumnNames;
+
+	void select(std::string name, std::vector<std::string> filterColumns = std::vector<std::string>());
+	void get_column_names();
 };
