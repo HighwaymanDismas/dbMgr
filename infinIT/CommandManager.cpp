@@ -52,7 +52,8 @@ void CommandManager::parse()
 		}
 		else if (std::regex_search(cmd, result, patternDelete))
 		{
-			std::cout << "DELET THIS XD\n";
+			instruction = new DeleteFrom(cmd);
+			instruction->execute();
 		}
 		else if (std::regex_search(cmd, result, patternDrop))
 		{
@@ -68,10 +69,10 @@ void CommandManager::parse()
 
 void CommandManager::set_regex_patterns()
 {
-	patternCreate = std::regex("^(CREATE)");
-	patternInsert = std::regex("^(INSERT INTO)");
-	patternSelect = std::regex("^(SELECT)");
-	patternDelete = std::regex("^(DELETE)");
-	patternDrop = std::regex("^(DROP)");
+	patternCreate = std::regex("^(CREATE)\\b");
+	patternInsert = std::regex("^(INSERT INTO)\\b");
+	patternSelect = std::regex("^(SELECT)\\b");
+	patternDelete = std::regex("^(DELETE)\\b");
+	patternDrop = std::regex("^(DROP)\\b");
 	antiPatternCommand = std::regex("[\\)]\\s*(INSERT|CREATE|SELECT)");
 }

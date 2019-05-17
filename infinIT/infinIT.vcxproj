@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="CommandManager.h" />
     <ClInclude Include="CreateTable.h" />
+    <ClInclude Include="DeleteFrom.h" />
     <ClInclude Include="DropTable.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InsertInto.h" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="CommandManager.cpp" />
     <ClCompile Include="CreateTable.cpp" />
+    <ClCompile Include="DeleteFrom.cpp" />
     <ClCompile Include="DropTable.cpp" />
     <ClCompile Include="infinIT.cpp" />
     <ClCompile Include="InputManager.cpp" />

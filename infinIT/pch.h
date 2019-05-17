@@ -17,5 +17,6 @@
 #include "SelectFrom.h"
 #include "CommandManager.h"
 #include "DropTable.h"
+#include "DeleteFrom.h"
 
 #endif //PCH_H

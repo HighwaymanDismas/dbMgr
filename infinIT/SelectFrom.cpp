@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "SelectFrom.h"
 
+SelectFrom::SelectFrom()
+{
+}
+
 SelectFrom::SelectFrom(std::string command)
 {
 	this->command = command;
@@ -19,7 +23,7 @@ bool SelectFrom::validate()
 	
 	if (std::regex_search(command, match, patternFrom) != 1)
 	{
-		std::cout << "SYNTAX ERROR\n";
+		std::cout << "!!! SYNTAX ERROR !!!\n";
 		return false;
 	}
 
