@@ -36,16 +36,16 @@ bool SelectFrom::validate()
 		return false;
 	}
 
-	SelectedColumnNames = (command.substr(7, match.position() - 8));
-	SelectedColumnNames.erase(std::remove_if(SelectedColumnNames.begin(), SelectedColumnNames.end(), ::isspace), SelectedColumnNames.end());
-
-	get_column_names();
+	columnNamesString = command.substr(6, match.position() - 7);
+	columnNamesString.erase(std::remove_if(columnNamesString.begin(), columnNamesString.end(), ::isspace), columnNamesString.end());
 	
-	if (SelectedColumnNames != "*")
+	if (columnNamesString.size() == 0)
 	{
-		std::cout << "!!! ONLY * WORKS AT THIS POINT !!!\n";
+		std::cout << "!!! SYNTAX ERROR !!!\n";
 		return false;
 	}
+
+	params = split(columnNamesString, ",");
 
 	return true;
 }
@@ -55,12 +55,7 @@ void SelectFrom::execute()
 	if (!validate())
 		return;
 
-	select(name);
-}
-
-void SelectFrom::get_column_names()
-{
-	//USE params
+	select(name, params);
 }
 
 void SelectFrom::select(std::string name, std::vector<std::string> filterColumns)
@@ -69,21 +64,33 @@ void SelectFrom::select(std::string name, std::vector<std::string> filterColumns
 	file.open(name.append(".txt"), std::ios::in);
 
 	std::getline(file, line);
-	params = split(line, ",");
+	tableParams = split(line, ",");
 
-	for (std::string param : params)
+	for (size_t i = 0; i < tableParams.size(); i++)
+	{
+		tableParams[i] = tableParams[i].substr(0, tableParams[i].find(":"));
+
+		if (filterColumns[0] != "*")
+		{
+			for (std::string colName : filterColumns)
+			{
+				if (colName == tableParams[i])
+					columnIndex.push_back(i);
+			}
+		}
+	}
+
+	for (std::string colName : tableParams)
 	{
 		bool flag = false;
 
-		if (param == params.back())
+		if (colName == tableParams.back())
 			flag = true;
 
-		param = param.substr(0, param.find(":"));
-
-		if(!flag)
-			std::cout << param << ", ";
+		if (!flag)
+			std::cout << colName << ", ";
 		else
-			std::cout << param << std::endl;
+			std::cout << colName << "\n";
 	}
 
 	while (!file.eof())
@@ -94,8 +101,13 @@ void SelectFrom::select(std::string name, std::vector<std::string> filterColumns
 
 	for (std::string line : data)
 	{
+		std::vector<std::string> tmp = split(line, ",");
+
+		for(int idx : columnIndex)
+			std::cout << tmp[idx] << "\n";
+
 		line.erase(line.end() - 1);
 		line = std::regex_replace(line, std::regex(","), ", ");
-		std::cout << line << std::endl;
+		//std::cout << line << std::endl;
 	}
 }

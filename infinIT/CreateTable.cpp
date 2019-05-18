@@ -33,7 +33,7 @@ bool CreateTable::validate()
 
 	if (table_exists(name))
 	{
-		std::cout << "!!! " << name << " TABLE ALREADY EXISTS !!!\n";
+		std::cout << "!!! TABLE " << name << " ALREADY EXISTS !!!\n";
 		return false;
 	}
 
@@ -61,7 +61,7 @@ void CreateTable::execute()
 	file.close();
 
 	if (table_exists(name))
-		std::cout << "!!! " << name << " TABLE CREATED SUCESSFULLY !!!\n";
+		std::cout << "!!! TABLE " << name << " CREATED SUCESSFULLY !!!\n";
 	else
 		std::cout << "!!! COULDN'T CREATE NEW FILE !!!\n";
 }
