@@ -47,6 +47,35 @@ bool SelectFrom::validate()
 
 	params = split(columnNamesString, ",");
 
+	std::string line;
+	file.open(name.append(".txt"), std::ios::in);
+
+	std::getline(file, line);
+	tableParams = split(line, ",");
+
+	for (size_t i = 0; i < tableParams.size(); i++)
+		tableParams[i] = tableParams[i].substr(0, tableParams[i].find(":"));
+
+	bool flag = false;
+
+	if (params.size() != 1 && params[0] != "*")
+	{
+		for (std::string filterColName : params)
+		{
+			for (std::string colName : tableParams)
+				if (filterColName == colName)
+					flag = true;
+
+			if (!flag)
+			{
+				std::cout << "!!! TYPED COLUMN DOESN'T EXIST !!!\n";
+				return false;
+			}
+
+			flag = false;
+		}
+	}
+
 	return true;
 }
 
@@ -61,37 +90,26 @@ void SelectFrom::execute()
 void SelectFrom::select(std::string name, std::vector<std::string> filterColumns)
 {
 	std::string line;
-	file.open(name.append(".txt"), std::ios::in);
 
-	std::getline(file, line);
-	tableParams = split(line, ",");
-
-	for (size_t i = 0; i < tableParams.size(); i++)
+	if (filterColumns.size() != 1 && filterColumns[0] != "*")
 	{
-		tableParams[i] = tableParams[i].substr(0, tableParams[i].find(":"));
-
-		if (filterColumns[0] != "*")
+		for (std::string colName : filterColumns)
 		{
-			for (std::string colName : filterColumns)
+			for (size_t i = 0; i < tableParams.size(); i++)
 			{
 				if (colName == tableParams[i])
+				{
 					columnIndex.push_back(i);
+					std::cout << colName << " ";
+				}
 			}
 		}
 	}
+	else
+		for (std::string colName : tableParams)
+			std::cout << colName << " ";
 
-	for (std::string colName : tableParams)
-	{
-		bool flag = false;
-
-		if (colName == tableParams.back())
-			flag = true;
-
-		if (!flag)
-			std::cout << colName << ", ";
-		else
-			std::cout << colName << "\n";
-	}
+	std::cout << std::endl;
 
 	while (!file.eof())
 	{
@@ -99,15 +117,25 @@ void SelectFrom::select(std::string name, std::vector<std::string> filterColumns
 		data.push_back(line);
 	}
 
+	std::vector<std::string> lineElements;
+
 	for (std::string line : data)
 	{
-		std::vector<std::string> tmp = split(line, ",");
+		lineElements = split(line, ",");
 
-		for(int idx : columnIndex)
-			std::cout << tmp[idx] << "\n";
-
-		line.erase(line.end() - 1);
-		line = std::regex_replace(line, std::regex(","), ", ");
-		//std::cout << line << std::endl;
+		if (filterColumns.size() != 1 && filterColumns[0] != "*")
+		{
+			for (int idx : columnIndex)
+				if (idx != columnIndex.back())
+					std::cout << lineElements[idx] << ", ";
+				else
+					std::cout << lineElements[idx] << std::endl;
+		}
+		else
+		{
+			line.erase(line.end() - 1);
+			line = std::regex_replace(line, std::regex(","), ", ");
+			std::cout << line << std::endl;
+		}
 	}
 }
