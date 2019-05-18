@@ -27,8 +27,19 @@ bool SelectFrom::validate()
 		return false;
 	}
 
-	name = command.substr(match.position() + match.length() + 1);
-	name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
+	std::smatch bufferMatch;
+
+	if (!std::regex_search(command, bufferMatch, patternWhere))
+	{
+		name = command.substr(match.position() + match.length() + 1);
+		name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
+	}
+	else
+	{
+		whereCommand = command.substr(bufferMatch.position() + bufferMatch.length() + 1);
+		name = command.substr(match.position() + match.length() + 1, bufferMatch.length() - 1);
+		name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
+	}
 	
 	if (!table_exists(name))
 	{
@@ -84,7 +95,15 @@ void SelectFrom::execute()
 	if (!validate())
 		return;
 
-	select(name, params);
+	if (whereCommand.size() != 0)
+	{
+		Where sWhere(whereCommand, tableParams);
+		sWhere.execute();
+		conditionValue = sWhere.get_data();
+		std::cout << conditionValue << std::endl;
+	}
+	else
+		select(name, params);
 }
 
 void SelectFrom::select(std::string name, std::vector<std::string> filterColumns)

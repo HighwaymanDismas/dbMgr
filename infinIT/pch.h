@@ -18,5 +18,6 @@
 #include "CommandManager.h"
 #include "DropTable.h"
 #include "DeleteFrom.h"
+#include "Where.h"
 
 #endif //PCH_H

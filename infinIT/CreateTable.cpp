@@ -19,7 +19,7 @@ CreateTable::~CreateTable()
 bool CreateTable::validate()
 {
 	command.erase(std::remove_if(command.begin(), command.end(), ::isspace), command.end());
-	command = command.substr(11);
+	command = command.substr(6);
 
 	if (!std::regex_search(command, match, patternParameters))
 	{

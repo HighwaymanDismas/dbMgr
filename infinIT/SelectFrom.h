@@ -17,14 +17,16 @@ protected:
 	std::regex patternWhere;
 	std::regex patternWhereParams;
 
+	std::vector<std::string> tableParams;
+
 	std::string columnNamesString;
 
 private:
-
 	std::vector<std::string> data;
-	std::vector<std::string> tableParams;
-
 	std::vector<int> columnIndex;
+
+	std::string whereCommand;
+	std::string conditionValue;
 
 	void select(std::string name, std::vector<std::string> filterColumns = std::vector<std::string>());
 };

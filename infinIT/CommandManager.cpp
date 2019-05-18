@@ -74,5 +74,5 @@ void CommandManager::set_regex_patterns()
 	patternSelect = std::regex("^(SELECT)\\b");
 	patternDelete = std::regex("^(DELETE FROM)\\b");
 	patternDrop = std::regex("^(DROP)\\b");
-	antiPatternCommand = std::regex("[\\)]\\s*(INSERT|CREATE|SELECT)");
+	antiPatternCommand = std::regex("[\\)]\\s*(INSERT|CREATE|SELECT|DROP|DELETE)");
 }

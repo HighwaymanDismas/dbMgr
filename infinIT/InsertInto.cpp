@@ -30,7 +30,7 @@ bool InsertInto::validate()
 
 	if (!table_exists(name))
 	{
-		std::cout << name << " Tabela NIE istnieje XDDDDDDD\n";
+		std::cout << "!!! TABLE " << name << " DOESN'T EXIST !!!\n";
 		return false;
 	}
 
