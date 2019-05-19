@@ -18,6 +18,7 @@ protected:
 	std::regex patternWhere;
 	std::regex patternOrderBy;
 	std::regex patternOrderByParam;
+	std::regex patternOrderByDESC;
 
 	std::vector<std::string> tableParams;
 
@@ -30,9 +31,13 @@ private:
 
 	std::string whereCommand;
 	std::string conditionValue;
+	std::string orderByValue;
 
 	static int colOrderByIndex;
 	int colWhereIndex;
+
+	bool orderByFlag;
+	bool orderByFlagDESC;
 
 	static bool compareASC(std::vector<std::string> a, std::vector<std::string> b);
 	static bool compareDESC(std::vector<std::string> a, std::vector<std::string> b);

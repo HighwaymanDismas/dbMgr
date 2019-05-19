@@ -8,7 +8,6 @@ DeleteFrom::DeleteFrom(std::string command)
 
 	patternFrom = std::regex("\\bFROM\\b");
 	patternWhere = std::regex("\\bWHERE\\b");
-
 }
 
 DeleteFrom::~DeleteFrom()
@@ -134,7 +133,6 @@ void DeleteFrom::remove_where(std::string name)
 		if (line != data2D.back())
 			file << std::endl;
 	}
-
 
 	file.close();
 }

@@ -1,16 +1,22 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "SelectFrom.h" 
 
 int SelectFrom::colOrderByIndex = -1;
 
 bool SelectFrom::compareASC(std::vector<std::string> a, std::vector<std::string> b)
 {
-	return a[colOrderByIndex] < b[colOrderByIndex];
+	if (a[colOrderByIndex].find_first_not_of("0123456789.") != std::string::npos)
+		return a[colOrderByIndex] < b[colOrderByIndex];
+
+	return std::stoi(a[colOrderByIndex]) < std::stoi(b[colOrderByIndex]);
 }
 
 bool SelectFrom::compareDESC(std::vector<std::string> a, std::vector<std::string> b)
 {
-	return a[colOrderByIndex] > b[colOrderByIndex];
+	if (a[colOrderByIndex].find_first_not_of("0123456789.") != std::string::npos)
+		return a[colOrderByIndex] > b[colOrderByIndex];
+
+	return std::stoi(a[colOrderByIndex]) > std::stoi(b[colOrderByIndex]);
 }
 
 SelectFrom::SelectFrom()
@@ -24,6 +30,10 @@ SelectFrom::SelectFrom(std::string command)
 	patternWhere = std::regex("\\b(WHERE)\\b");
 	patternFrom = std::regex("\\b(FROM)\\b");
 	patternOrderBy = std::regex("\\b(ORDER BY)\\b");
+	patternOrderByDESC = std::regex("\\b(DESC)");
+
+	orderByFlag = false;
+	orderByFlagDESC = false;
 }
 
 SelectFrom::~SelectFrom()
@@ -41,7 +51,23 @@ bool SelectFrom::validate()
 	}
 
 	std::smatch bufferMatch;
+	std::smatch bufferMatchDESC;
 
+	if (std::regex_search(command, bufferMatch, patternOrderBy))
+	{
+		if (std::regex_search(command, bufferMatchDESC, patternOrderByDESC))
+		{
+			command = command.substr(0, bufferMatchDESC.position() - 1);
+
+			orderByFlagDESC = true;
+		}
+
+		orderByValue = command.substr(bufferMatch.position() + bufferMatch.length());
+		orderByValue.erase(std::remove_if(orderByValue.begin(), orderByValue.end(), ::isspace), orderByValue.end());
+		command = command.substr(0, bufferMatch.position() - 1);
+
+		orderByFlag = true;
+	}
 	if (!std::regex_search(command, bufferMatch, patternWhere))
 	{
 		name = command.substr(match.position() + match.length() + 1);
@@ -100,6 +126,26 @@ bool SelectFrom::validate()
 		}
 	}
 
+	if (orderByFlag)
+	{
+		flag = false;
+
+		for (size_t i = 0; i < tableParams.size(); i++)
+		{
+			if (orderByValue == tableParams[i])
+			{
+				flag = true;
+				colOrderByIndex = i;
+			}
+		}
+
+		if (!flag)
+		{
+			std::cout << "!!! TYPED COLUMN DOESN'T EXIST !!!\n";
+			return false;
+		}
+	}
+
 	return true;
 }
 
@@ -128,6 +174,8 @@ void SelectFrom::execute()
 
 void SelectFrom::select(std::string name, std::vector<std::string> filterColumns)
 {
+	std::cout << "!!! CONTENTS OF " << name.substr(0, name.size() - 4) << " TABLE !!!\n\n";
+
 	std::string line;
 
 	if (filterColumns.size() != 0 && filterColumns[0] != "*")
@@ -166,8 +214,14 @@ void SelectFrom::select(std::string name, std::vector<std::string> filterColumns
 		data2D.push_back(lineElements);
 	}
 
-	colOrderByIndex = 3;
-	std::sort(data2D.begin(), data2D.end(), compareDESC);
+	if (colOrderByIndex != -1)
+	{
+		if(!orderByFlagDESC)
+			std::sort(data2D.begin(), data2D.end(), compareASC);
+		else
+			std::sort(data2D.begin(), data2D.end(), compareDESC);
+	}
+
 
 	for (std::vector<std::string> lineElements : data2D)
 	{
@@ -193,4 +247,6 @@ void SelectFrom::select(std::string name, std::vector<std::string> filterColumns
 			}
 		}
 	}
+
+	std::cout << "\n!!! END OF " << name.substr(0, name.size() - 4) << " TABLE !!!\n";
 }
