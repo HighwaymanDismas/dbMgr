@@ -1,5 +1,17 @@
 #include "pch.h"
-#include "SelectFrom.h"
+#include "SelectFrom.h" 
+
+int SelectFrom::colOrderByIndex = -1;
+
+bool SelectFrom::compareASC(std::vector<std::string> a, std::vector<std::string> b)
+{
+	return a[colOrderByIndex] < b[colOrderByIndex];
+}
+
+bool SelectFrom::compareDESC(std::vector<std::string> a, std::vector<std::string> b)
+{
+	return a[colOrderByIndex] > b[colOrderByIndex];
+}
 
 SelectFrom::SelectFrom()
 {
@@ -9,8 +21,9 @@ SelectFrom::SelectFrom(std::string command)
 {
 	this->command = command;
 
-	patternWhere = std::regex("\\bWHERE\\b");
-	patternFrom = std::regex("\\bFROM\\b");
+	patternWhere = std::regex("\\b(WHERE)\\b");
+	patternFrom = std::regex("\\b(FROM)\\b");
+	patternOrderBy = std::regex("\\b(ORDER BY)\\b");
 }
 
 SelectFrom::~SelectFrom()
@@ -43,7 +56,7 @@ bool SelectFrom::validate()
 	
 	if (!table_exists(name))
 	{
-		std::cout << "!!! " << name << " DOESN'T EXIST !!!\n";
+		std::cout << "!!! TABLE " << name << " DOESN'T EXIST !!!\n";
 		return false;
 	}
 
@@ -150,6 +163,14 @@ void SelectFrom::select(std::string name, std::vector<std::string> filterColumns
 		line.erase(line.size() - 1);
 		lineElements = split(line, ",");
 
+		data2D.push_back(lineElements);
+	}
+
+	colOrderByIndex = 3;
+	std::sort(data2D.begin(), data2D.end(), compareDESC);
+
+	for (std::vector<std::string> lineElements : data2D)
+	{
 		if (colWhereIndex == -1 || lineElements[colWhereIndex] == conditionValue)
 		{
 			if (filterColumns.size() != 0 && filterColumns[0] != "*")

@@ -1,4 +1,4 @@
 Title:Varchar(100),Author:Varchar(60),NumberOfCopies:Integer,Price:Float,Available:Boolean;
 "Autostopem przez galaktyke","Douglas Adams",3,42.00,FALSE;
-"Diuna","Frank Herbert",5,55.00,TRUE;
 "TO","Stephen King",2,39.99,FALSE;
+"Diuna","Frank Herbert",5,55.00,TRUE;

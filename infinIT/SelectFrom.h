@@ -16,7 +16,8 @@ protected:
 	std::regex patternColumns;
 	std::regex patternFrom;
 	std::regex patternWhere;
-	std::regex patternWhereParams;
+	std::regex patternOrderBy;
+	std::regex patternOrderByParam;
 
 	std::vector<std::string> tableParams;
 
@@ -24,12 +25,16 @@ protected:
 
 private:
 	std::vector<std::string> data;
+	std::vector<std::vector<std::string>> data2D;
 	std::vector<int> columnIndex;
 
 	std::string whereCommand;
 	std::string conditionValue;
 
+	static int colOrderByIndex;
 	int colWhereIndex;
 
+	static bool compareASC(std::vector<std::string> a, std::vector<std::string> b);
+	static bool compareDESC(std::vector<std::string> a, std::vector<std::string> b);
 	void select(std::string name, std::vector<std::string> filterColumns = std::vector<std::string>());
 };

@@ -1,0 +1,1 @@
+ID:Integer,Brand:Varchar(30),Model:Varchar(32),Engine_size:Float,Price:Float;
