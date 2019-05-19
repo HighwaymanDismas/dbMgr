@@ -37,7 +37,7 @@ bool SelectFrom::validate()
 	else
 	{
 		whereCommand = command.substr(bufferMatch.position() + bufferMatch.length() + 1);
-		name = command.substr(match.position() + match.length() + 1, bufferMatch.length() - 1);
+		name = command.substr(match.position() + match.length() + 1, bufferMatch.position() - (match.position() + match.length() + 1));
 		name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
 	}
 	
@@ -98,7 +98,10 @@ void SelectFrom::execute()
 	if (whereCommand.size() != 0)
 	{
 		Where sWhere(whereCommand, tableParams);
-		sWhere.execute();
+
+		if(!sWhere.validate())
+			return;
+
 		conditionValue = sWhere.get_data();
 		colWhereIndex = sWhere.get_index();
 		select(name, params);

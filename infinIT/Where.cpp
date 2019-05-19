@@ -7,7 +7,7 @@ Where::Where(std::string command, std::vector<std::string> tableParams)
 	this->command = command;
 	this->tableParams = tableParams;
 
-	pattern = std::regex("(\\B(\"\\w+\")\\B|\\b(\\d+\\.\\d+)\\b|^\\d+$|\\b(FALSE)\\b|\\b(TRUE)\\b)", std::regex::icase);
+	pattern = std::regex("(\\B(\"[\\w\\s]+\")\\B|\\b(\\d+\\.\\d+)\\b|^\\d+$|\\b(FALSE)\\b|\\b(TRUE)\\b)", std::regex::icase);
 }
 
 Where::~Where()
@@ -16,8 +16,8 @@ Where::~Where()
 
 bool Where::validate()
 {
-	command.erase(std::remove_if(command.begin(), command.end(), ::isspace), command.end());
 	name = command.substr(0, command.find("="));
+	name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
 
 	colIndex = -1;
 
@@ -39,6 +39,8 @@ bool Where::validate()
 		return false;
 	}
 
+	data = match[0];
+
 	return true;
 }
 
@@ -46,8 +48,6 @@ void Where::execute()
 {
 	if (!validate())
 		return;
-
-	data = command.substr(command.find("=") + 1);
 }
 
 std::string Where::get_data()
