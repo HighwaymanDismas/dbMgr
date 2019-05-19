@@ -167,7 +167,7 @@
     <ClCompile Include="CreateTable.cpp" />
     <ClCompile Include="DeleteFrom.cpp" />
     <ClCompile Include="DropTable.cpp" />
-    <ClCompile Include="infinIT.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InsertInto.cpp" />
     <ClCompile Include="Instruction.cpp" />
