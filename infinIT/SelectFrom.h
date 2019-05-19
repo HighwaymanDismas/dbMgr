@@ -1,5 +1,6 @@
 #pragma once
 #include "Instruction.h"
+#include "Where.h"
 
 class SelectFrom : public Instruction
 {
@@ -27,6 +28,8 @@ private:
 
 	std::string whereCommand;
 	std::string conditionValue;
+
+	int colWhereIndex;
 
 	void select(std::string name, std::vector<std::string> filterColumns = std::vector<std::string>());
 };

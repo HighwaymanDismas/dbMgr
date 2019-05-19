@@ -19,13 +19,13 @@ bool Where::validate()
 	command.erase(std::remove_if(command.begin(), command.end(), ::isspace), command.end());
 	name = command.substr(0, command.find("="));
 
-	bool flag = false;
+	colIndex = -1;
 
-	for (std::string colName : tableParams)
-		if (colName == name)
-			flag = true;
+	for (size_t i = 0; i < tableParams.size(); i++)
+		if (tableParams[i] == name)
+			colIndex = i;
 
-	if (!flag)
+	if (colIndex == -1)
 	{
 		std::cout << "!!! COLUMN " << name << " DOESN'T EXIST !!!\n";
 		return false;
@@ -53,4 +53,9 @@ void Where::execute()
 std::string Where::get_data()
 {
 	return data;
+}
+
+int Where::get_index()
+{
+	return colIndex;
 }

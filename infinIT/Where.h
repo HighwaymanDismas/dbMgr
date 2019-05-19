@@ -11,6 +11,7 @@ public:
 	virtual void execute() override;
 
 	std::string get_data();
+	int get_index();
 
 private:
 	std::regex pattern;
@@ -18,5 +19,7 @@ private:
 	std::vector<std::string> tableParams;
 
 	std::string data;
+
+	int colIndex;
 };
 

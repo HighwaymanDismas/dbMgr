@@ -100,17 +100,21 @@ void SelectFrom::execute()
 		Where sWhere(whereCommand, tableParams);
 		sWhere.execute();
 		conditionValue = sWhere.get_data();
-		std::cout << conditionValue << std::endl;
+		colWhereIndex = sWhere.get_index();
+		select(name, params);
 	}
 	else
+	{
+		colWhereIndex = -1;
 		select(name, params);
+	}
 }
 
 void SelectFrom::select(std::string name, std::vector<std::string> filterColumns)
 {
 	std::string line;
 
-	if (filterColumns.size() != 1 && filterColumns[0] != "*")
+	if (filterColumns.size() != 0 && filterColumns[0] != "*")
 	{
 		for (std::string colName : filterColumns)
 		{
@@ -140,21 +144,29 @@ void SelectFrom::select(std::string name, std::vector<std::string> filterColumns
 
 	for (std::string line : data)
 	{
+		line.erase(line.size() - 1);
 		lineElements = split(line, ",");
 
-		if (filterColumns.size() != 1 && filterColumns[0] != "*")
+		if (colWhereIndex == -1 || lineElements[colWhereIndex] == conditionValue)
 		{
-			for (int idx : columnIndex)
-				if (idx != columnIndex.back())
-					std::cout << lineElements[idx] << ", ";
-				else
-					std::cout << lineElements[idx] << std::endl;
-		}
-		else
-		{
-			line.erase(line.end() - 1);
-			line = std::regex_replace(line, std::regex(","), ", ");
-			std::cout << line << std::endl;
+			if (filterColumns.size() != 0 && filterColumns[0] != "*")
+			{
+				for (int idx : columnIndex)
+					if (idx != columnIndex.back())
+						std::cout << lineElements[idx] << ", ";
+					else
+						std::cout << lineElements[idx] << std::endl;
+			}
+			else
+			{
+				for (size_t i = 0; i < lineElements.size(); i++)
+				{
+					if (i == lineElements.size() - 1)
+						std::cout << lineElements[i] << std::endl;
+					else
+						std::cout << lineElements[i] << ", ";
+				}
+			}
 		}
 	}
 }
